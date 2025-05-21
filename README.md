@@ -3,6 +3,8 @@
 **Author:** kernelstudio
 **Version:** 0.0.1
 **Type:** tool
+**Github Repo:** [https://github.com/kernelstudio/ksai-dify-plugin-contract](https://github.com/kernelstudio/ksai-dify-plugin-contract)  
+**Github Issues:** [issues](https://github.com/kernelstudio/ksai-dify-plugin-contract/issues)
 
 ### Description 说明
 
