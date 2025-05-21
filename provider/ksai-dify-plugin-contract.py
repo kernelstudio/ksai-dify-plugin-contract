@@ -6,7 +6,7 @@ from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 from ksai.llm.ollama_client import ollama_check_model_exists
 
 
-class KsaiDifyPluginContractParserProvider(ToolProvider):
+class KsaiDifyPluginContractProvider(ToolProvider):
     def _validate_credentials(self, credentials: dict[str, Any]) -> None:
         try:
             ollama_host = credentials['ollama_host']

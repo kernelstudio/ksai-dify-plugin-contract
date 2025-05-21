@@ -40,8 +40,6 @@ def contract_content_extractor(host: str, model: str, options: dict[str, t.Any])
     )
     options['prompt'] = prompt
 
-    print(options)
-
     result = ollama_execute(host, model, options)
     if result and "</think>" in result:
         result = result.split("</think>")[1]
