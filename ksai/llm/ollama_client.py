@@ -52,26 +52,26 @@ def ollama_execute(host: str, model: str, options: dict[str, t.Any]) -> str | No
 
     final_options = {}
     for k in ['seed', 'num_predict', 'top_k', 'num_ctx', 'repeat_last_n']:
-        if k in options and options[k] is not None:
+        if k in options and options.get(k) is not None:
             final_options[k] = int(options[k])
 
     for k in ['top_p', 'temperature', 'repeat_penalty']:
-        if k in options and options[k] is not None:
+        if k in options and options.get(k) is not None:
             final_options[k] = float(options[k])
 
     stream = True
-    if 'stream' in options  and options['stream'] is not None:
+    if 'stream' in options and options.get('stream') is not None:
         stream = bool(options['stream'])
 
     prompt = ''
-    if 'prompt' in options and options['prompt'] is not None:
+    if 'prompt' in options and options.get('prompt') is not None:
         prompt = str(options['prompt'])
 
     connection_timeout = 120
     read_timeout = 120
-    if 'read_timeout' in options and options['read_timeout'] is not None:
+    if 'read_timeout' in options and options.get('read_timeout', None) is not None:
         read_timeout = int(options['read_timeout'])
-    if 'connection_timeout' in options and options['connection_timeout'] is not None:
+    if 'connection_timeout' in options and options.get('connection_timeout', None) is not None:
         connection_timeout = int(options['connection_timeout'])
 
     data = {
@@ -80,6 +80,7 @@ def ollama_execute(host: str, model: str, options: dict[str, t.Any]) -> str | No
         "stream": stream,
         "options": final_options
     }
+
     try:
         response = requests.post(
             url,

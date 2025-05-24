@@ -13,32 +13,52 @@ import typing as t
 from ksai.contract.prompts import format_contract_extractor_prompt
 from ksai.formater import clean_json_response
 from ksai.llm.ollama_client import ollama_execute
+from ksai.utils.strings import has_text
+
+
+def parse_user_prompt(options: dict[str, t.Any]) -> str:
+    user_prompt = options.get('user_prompt', None)
+    if not has_text(user_prompt):
+        user_prompt = '请从以下合同文本中提取相关信息.'
+
+    if user_prompt and '{rules}' in user_prompt:
+        rules = options.get('rules', None)
+        if not has_text(rules):
+            rules = ''
+        user_prompt = user_prompt.replace('{rules}', rules)
+    return user_prompt
+
+
+def parse_system_prompt(options: dict[str, t.Any]) -> str | None:
+    system_prompt = options.get('system_prompt', None)
+    if not has_text(system_prompt):
+        system_prompt = None
+    return system_prompt
 
 
 def contract_content_extractor(host: str, model: str, options: dict[str, t.Any]) -> str | None:
-    prompt = options['prompt']
-    if not prompt:
-        prompt = '请从以下合同文本中提取{rules}相关信息，不要输出重复的内容, 请直接使用JSON格式回答.'
+    system_prompt = parse_system_prompt(options)
+    user_prompt = parse_user_prompt(options)
 
-    if prompt and '{rules}' in prompt:
-        rules = options['rules']
-        if not rules:
-            rules = ''
-        prompt = prompt.replace('{rules}', rules)
-
-    text = options['text']
+    text = options.get('text', '')
     if text:
         try:
-            text_json = json.loads(clean_json_response(options['text']))
-            if text_json and text_json['text']:
+            text_json = json.loads(clean_json_response(text))
+            if text_json and text_json.get('text', None):
                 text = text_json['text']
+            elif text_json and text_json.get('output', None):
+                text = text_json['output']
         except Exception:
             pass
+
     prompt = format_contract_extractor_prompt(
-        prompt,
-        text
+        user_prompt,
+        text,
+        system_prompt,
     )
-    options['prompt'] = prompt
+    options.update({
+        'prompt': prompt
+    })
 
     result = ollama_execute(host, model, options)
     if result and "</think>" in result:

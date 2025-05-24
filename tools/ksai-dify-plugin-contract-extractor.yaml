@@ -21,18 +21,29 @@ parameters :
     human_description :
       en_US : "Contract text"
       zh_Hans : "合同文本"
-  - name : prompt
+  - name : system_prompt
     type : string
     required : false
-    llm_description : prompt
+    llm_description : system_prompt
     form : llm
-    default : "请从以下合同文本中提取{rules}相关信息，不要输出重复的内容, 请直接使用JSON格式回答."
     label :
-      en_US : prompt
-      zh_Hans : 提示词
+      en_US : System prompt
+      zh_Hans : 系统提示词
     human_description :
-      en_US : "Prompt words, where {rules} is a placeholder for extracting rules."
-      zh_Hans : "提示词,其中{rules}为提取规则占位符."
+      en_US : "System prompt."
+      zh_Hans : "系统提示词."
+  - name : user_prompt
+    type : string
+    required : false
+    llm_description : user_prompt
+    form : llm
+    default : "请从以下合同文本中提取相关信息."
+    label :
+      en_US : User Prompt
+      zh_Hans : 用户提示词
+    human_description :
+      en_US : "User prompt words, where {rules} is a placeholder for extracting rules."
+      zh_Hans : "用户提示词,其中{rules}为提取规则占位符."
   - name : rules
     type : string
     llm_description : rules
@@ -125,17 +136,6 @@ parameters :
     human_description :
       en_US : Set a random number seed to control the randomness during the generation process. The same seed will result in the same output, suitable for scenarios that require reproducible results.
       zh_Hans : 随机数种子,用于控制生成过程中的随机性,相同的种子会导致相同的输出,适用于需要可重复结果的场景.
-  - name : num_predict
-    type : number
-    llm_description : num_predict
-    form : form
-    required : false
-    label :
-      en_US : num_predict
-      zh_Hans : num_predict
-    human_description :
-      en_US : The maximum number of tokens generated, controlling the length of the generated text.
-      zh_Hans : 生成的最大tokens数量,控制生成的文本长度.
   - name : num_predict
     type : number
     llm_description : num_predict
