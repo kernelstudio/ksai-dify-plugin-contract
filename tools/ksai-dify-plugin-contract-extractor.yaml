@@ -37,7 +37,7 @@ parameters :
     required : false
     llm_description : user_prompt
     form : llm
-    default : "请从以下合同文本中提取相关信息."
+    default : "提取以下合同中的关键信息."
     label :
       en_US : User Prompt
       zh_Hans : 用户提示词

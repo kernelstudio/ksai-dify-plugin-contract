@@ -8,7 +8,7 @@
 # For the full copyright and license information, please view the LICENSE file
 # that was distributed with this source code.
 
-default_system_prompt = "你是一个专业的合同解析助手，需要准确提取合同关键信息."
+default_system_prompt = "你是一个专业的合同解析助手，能够准确识别合同中的关键信息并以JSON格式返回,请严格按照JSON规范。"
 
 
 def format_contract_extractor_prompt(user_prompt: str, text: str, system_prompt: str = None) -> str:

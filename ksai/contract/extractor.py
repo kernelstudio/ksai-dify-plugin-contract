@@ -19,7 +19,7 @@ from ksai.utils.strings import has_text
 def parse_user_prompt(options: dict[str, t.Any]) -> str:
     user_prompt = options.get('user_prompt', None)
     if not has_text(user_prompt):
-        user_prompt = '请从以下合同文本中提取相关信息.'
+        user_prompt = '提取以下合同中的关键信息.'
 
     if user_prompt and '{rules}' in user_prompt:
         rules = options.get('rules', None)
@@ -63,4 +63,17 @@ def contract_content_extractor(host: str, model: str, options: dict[str, t.Any])
     result = ollama_execute(host, model, options)
     if result and "</think>" in result:
         result = result.split("</think>")[1]
-    return clean_json_response(result)
+    result = clean_json_response(result)
+    if result:
+        try:
+            d = json.loads(result)
+            if d is not None:
+                datas = {}
+                for k, v in d.items():
+                    if v and k not in datas:
+                        datas[k] = v
+                return json.dumps(datas, ensure_ascii=False)
+        except Exception as e:
+            print(e)
+            pass
+    return result
